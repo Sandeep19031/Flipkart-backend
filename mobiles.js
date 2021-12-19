@@ -201,11 +201,12 @@ async function upsertListingByName(client, title, updatedListing) {
   }
 }
 
-export async function ListingAll() {
+export async function ListingAll(query) {
+  // console.log(query);
   const cursor = await client
     .db("FlipkartDatabase")
     .collection("Mobiles")
-    .find({});
+    .find({ updated_price: { $gte: Number(query.updated_price) } });
 
   const results = await cursor.toArray();
   return results;
