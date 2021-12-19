@@ -162,7 +162,7 @@ async function main() {
   try {
     await client.connect();
 
-    // await ListingAll(client);
+    await ListingAll(client);
 
     // for (let data of details) {
     //   await upsertListingByName(client, data["title"], data);

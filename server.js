@@ -3,10 +3,12 @@ import mongoose from "mongoose";
 import { ListingAll } from "./mobiles.js";
 
 import ProductCategory from "./data.js";
+import cors from "cors"; //use this
+
 const app = express();
 const port = process.env.PORT || 9000;
 
-app.use(express.json());
+app.use(cors()); //and this
 
 const connectionUrl =
   "mongodb+srv://flipkartAdmin:SepOVz91L12gzknB@cluster0.c8mxf.mongodb.net/FlipkartDatabase?retryWrites=true&w=majority";
