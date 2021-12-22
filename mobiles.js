@@ -5,8 +5,9 @@ let details = [
     title: "Redmi 9 (Sporty Orange, 64 GB)  (4 GB RAM)",
     link: "https://www.linkpicture.com/q/Redmi-9-Sporty-Orange-64GB.jpeg",
     original_price: 10760,
-    updated_price: 10090,
     discount: 6,
+    rating: 3.5,
+    brand: "Mi",
     highlights: [
       "4 GB RAM | 64 GB ROM",
       "16.59 cm (6.53 inch) HD+ Display",
@@ -21,8 +22,9 @@ let details = [
     title: "Mi 11X (Celestial Silver, 128 GB)  (8 GB RAM)",
     link: "https://www.linkpicture.com/q/Mi-11X-Celestial-Silver-128GB.jpeg",
     original_price: 26190,
-    updated_price: 26190,
-    discount: 0,
+    discount: 4,
+    rating: 4.5,
+    brand: "Mi",
     highlights: [
       "8 GB RAM | 128 GB ROM",
       "16.94 cm (6.67 inch) Full HD+ Display",
@@ -37,8 +39,9 @@ let details = [
     title: "MI 11X 5G (COSMIC BLACK, 128 GB)  (6 GB RAM)",
     link: "https://www.linkpicture.com/q/MI-11X-5G-Cosmic-Black-128GB.jpeg",
     original_price: 26300,
-    updated_price: 26300,
-    discount: 0,
+    discount: 10,
+    rating: 3,
+    brand: "Mi",
     highlights: [
       "6 GB RAM | 128 GB ROM",
       "16.94 cm (6.67 inch) Display",
@@ -51,8 +54,9 @@ let details = [
     title: "MI 11X 5G (LUNAR WHITE, 128 GB)  (6 GB RAM)",
     link: "https://www.linkpicture.com/q/MI-11X-5G-Lunar-White-128GB.jpeg",
     original_price: 28995,
-    updated_price: 28995,
-    discount: 0,
+    discount: 1,
+    rating: 5,
+    brand: "Mi",
     highlights: [
       "6 GB RAM | 128 GB ROM",
       "16.94 cm (6.67 inch) Display",
@@ -65,8 +69,9 @@ let details = [
     title: "Redmi 9 (Carbon Black, 64 GB)  (4 GB RAM)",
     link: "https://www.linkpicture.com/q/Redmi-9-Carbon-Black-64GB.jpeg",
     original_price: 10380,
-    updated_price: 10380,
-    discount: 0,
+    discount: 5,
+    rating: 4,
+    brand: "Mi",
     highlights: [
       "4 GB RAM | 64 GB ROM",
       "16.59 cm (6.53 inch) HD+ Display",
@@ -81,8 +86,9 @@ let details = [
     title: "Redmi K20 (Carbon Black, 128 GB)  (6 GB RAM)#JustHere",
     link: "https://www.linkpicture.com/q/Redmi-K20-Carbon-Black-128GB.jpeg",
     original_price: 20985,
-    updated_price: 20985,
-    discount: 0,
+    discount: 15,
+    rating: 4.2,
+    brand: "Mi",
     highlights: [
       "6 GB RAM | 128 GB ROM",
       "16.23 cm (6.39 inch) Full HD+ Display",
@@ -97,8 +103,9 @@ let details = [
     title: "REDMI NOTE 10 LITE (Glacier White, 128 GB)  (4 GB RAM)",
     link: "https://www.linkpicture.com/q/Redmi-Note-10-lite-Glacier-White-128GB.jpeg",
     original_price: 15975,
-    updated_price: 15975,
-    discount: 0,
+    discount: 8,
+    rating: 3.4,
+    brand: "Mi",
     highlights: [
       "4 GB RAM | 128 GB ROM",
       "16.94 cm (6.67 inch) Display",
@@ -111,8 +118,9 @@ let details = [
     title: "Redmi 9A (Nature Green, 32 GB)  (2 GB RAM)",
     link: "https://www.linkpicture.com/q/Redmi-9A-Nature-Green-32GB.jpeg",
     original_price: 7888,
-    updated_price: 7888,
-    discount: 0,
+    discount: 8,
+    rating: 3.9,
+    brand: "Mi",
     highlights: [
       "2 GB RAM | 32 GB ROM",
       "16.59 cm (6.53 inch) Full HD+ Display",
@@ -125,8 +133,9 @@ let details = [
     title: "Redmi 9A (SeaBlue, 32 GB)  (2 GB RAM)",
     link: "https://www.linkpicture.com/q/Redmi-9A-SeaBlue-32GB.jpeg",
     original_price: 7902,
-    updated_price: 7902,
-    discount: 0,
+    discount: 7,
+    rating: 4.1,
+    brand: "Mi",
     highlights: [
       "2 GB RAM | 32 GB ROM",
       "16.59 cm (6.53 inch) Full HD+ Display",
@@ -139,8 +148,9 @@ let details = [
     title: "Xiaomi 11Lite NE (Diamond Dazzle, 128 GB)  (8 GB RAM)",
     link: "https://www.linkpicture.com/q/Xiaomi-11Lite-NE-Diamond-Dazzle-128GB.jpeg",
     original_price: 28999,
-    updated_price: 28999,
-    discount: 0,
+    discount: 5,
+    rating: 4.6,
+    brand: "Mi",
     highlights: [
       "8 GB RAM | 128 GB ROM | Expandable Upto 1 TB",
       "16.64 cm (6.55 inch) Full HD+ Display",
@@ -162,11 +172,10 @@ async function main() {
   try {
     await client.connect();
 
-    await ListingAll(client);
-
     // for (let data of details) {
     //   await upsertListingByName(client, data["title"], data);
     // }
+    await ListingAll(client);
 
     // details.forEach((data) => {
 
@@ -202,13 +211,24 @@ async function upsertListingByName(client, title, updatedListing) {
 }
 
 export async function ListingAll(query) {
-  // console.log(query);
   const cursor = await client
     .db("FlipkartDatabase")
     .collection("Mobiles")
-    .find({ updated_price: { $gte: Number(query.updated_price) } });
+    .find({
+      updated_price: {
+        $gte: Number(!query.updated_price ? 0 : query.updated_price),
+      },
+      rating: {
+        $gte: Number(!query.rating ? 0 : query.rating),
+      },
+      discount: {
+        $gte: Number(!query.discount ? 0 : query.discount),
+      },
+      brand: !query.brand ? { $nin: [] } : { $in: query.brand },
+    });
 
   const results = await cursor.toArray();
+  // console.log(results);
   return results;
 }
 export default client;

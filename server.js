@@ -23,7 +23,7 @@ app.get("/hello", (req, res) => res.status(200).send("hello world!!"));
 
 app.get("/mobiles", async (req, res) => {
   const query = req.query;
-  console.log(query);
+  console.log("server: ", query);
   const result = await ListingAll(query);
   // console.log(result);
   res.status(200).send(result);
