@@ -210,25 +210,51 @@ async function upsertListingByName(client, title, updatedListing) {
   }
 }
 
-export async function ListingAll(query) {
-  const cursor = await client
-    .db("FlipkartDatabase")
-    .collection("Mobiles")
-    .find({
-      updated_price: {
-        $gte: Number(!query.updated_price ? 0 : query.updated_price),
-      },
-      rating: {
-        $gte: Number(!query.rating ? 0 : query.rating),
-      },
-      discount: {
-        $gte: Number(!query.discount ? 0 : query.discount),
-      },
-      brand: !query.brand ? { $nin: [] } : { $in: query.brand },
-    });
+export async function ListingAll(query, database) {
+  // console.log(database, " :", query);
+  if (database == "Mobiles") {
+    const cursor = await client
+      .db("FlipkartDatabase")
+      .collection(database)
+      .find({
+        updated_price: {
+          $gte: Number(!query.updated_price ? 0 : query.updated_price),
+        },
+        rating: {
+          $gte: Number(!query.rating ? 0 : query.rating),
+        },
+        discount: {
+          $gte: Number(!query.discount ? 0 : query.discount),
+        },
+        brand: !query.brand ? { $nin: [] } : { $in: query.brand },
+      });
+    const results = await cursor.toArray();
+    // console.log(results);
+    return results;
+  } else {
+    const cursor = await client
+      .db("FlipkartDatabase")
+      .collection(database)
+      .find(query);
 
-  const results = await cursor.toArray();
-  // console.log(results);
-  return results;
+    const results = await cursor.toArray();
+    // console.log(results);
+    return results;
+  }
 }
+
+export async function CreateNewUser(body, database) {
+  // insertOne --> insert one document at the database
+  console.log(database, " :", body);
+  const result = await client
+    .db("FlipkartDatabase")
+    .collection(database)
+    .insertOne(body);
+
+  console.log(
+    `New listing created with the following id: ${result.insertedId}`
+  );
+  return "done!!";
+}
+
 export default client;
