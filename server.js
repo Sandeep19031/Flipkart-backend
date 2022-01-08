@@ -37,6 +37,12 @@ app.get("/login", async (req, res) => {
   res.status(200).send(result);
 });
 
+app.get("/products", async (req, res) => {
+  const query = req.query;
+  const result = await ListingAll(query, "Mobiles");
+  res.status(200).send(result);
+});
+
 app.post("/productCategory", (req, res) => {
   const db = req.body;
   ProductCategory.create(db, (err, data) => {
