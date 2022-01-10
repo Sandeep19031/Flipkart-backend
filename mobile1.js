@@ -50,10 +50,12 @@ export async function ListingAll(query, database) {
       .db("FlipkartDatabase")
       .collection(database)
       .findOne(query);
-    if (cursor) {
-      return [cursor];
+    console.log("cursor-->", cursor);
+    if (cursor != null) {
+      console.log("done!!");
+      return cursor;
     } else {
-      return [];
+      return {};
     }
   }
 }
@@ -73,6 +75,7 @@ export async function ListingAllProducts(query, database) {
 
 // Add new user
 export async function CreateNewUser(body, database) {
+  console.log(body);
   // insertOne --> insert one document at the database
   const result = await client
     .db("FlipkartDatabase")

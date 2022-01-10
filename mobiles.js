@@ -297,6 +297,11 @@ async function main() {
     await client.connect();
 
     for (let data of details) {
+      data.updated_price = Number(
+        Number(
+          data.original_price - (data.discount * data.original_price) / 100
+        ).toFixed(0)
+      );
       await upsertListingByName(client, data["title"], data);
     }
     // await ListingAll(client);
