@@ -252,7 +252,7 @@ let details = [
   },
   {
     title: "realme Narzo 50A (Oxygen Blue, 64 GB)  (4 GB RAM)",
-    brand: "realme",
+    brand: "Realme",
     rating: 4.4,
     discount: 11,
     original_price: 12999,
